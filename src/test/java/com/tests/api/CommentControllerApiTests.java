@@ -18,14 +18,14 @@ public class CommentControllerApiTests {
         data.setMessage(faker.job().keySkills());
         data.setUsername(faker.name().username());
         CommentControllerApi api = new CommentControllerApi();
-        int statusCode = api.postCreateComment(data, 223);
+        int statusCode = api.postCreateComment(data, 441);
         Assert.assertEquals(statusCode, 200);
     }
 
     @Test(description = "Get - All comments test")
     public void getAllCommentsTest() throws IOException {
         CommentControllerApi api = new CommentControllerApi();
-        int statusCode = api.getAllComments(223);
+        int statusCode = api.getAllComments(441);
         Assert.assertEquals(statusCode, 200);
     }
 }

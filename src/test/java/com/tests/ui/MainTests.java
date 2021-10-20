@@ -26,10 +26,14 @@ public class MainTests extends BaseTest {
         AuthControllerApi authControllerApi = new AuthControllerApi();
         authControllerApi.postSignIn(authControllerData);
 
+        String title = faker.job().title();
+        String description = faker.job().position();
+        int price = (int)faker.number().randomNumber(2, true) * 100;
+
         JobControllerData jobControllerData = new JobControllerData();
-        jobControllerData.setTitle(faker.job().title());
-        jobControllerData.setDescription(faker.job().position());
-        jobControllerData.setPrice((int)faker.number().randomNumber(2, true) * 100);
+        jobControllerData.setTitle(title);
+        jobControllerData.setDescription(description);
+        jobControllerData.setPrice(price);
 
         JobControllerApi jobControllerApi = new JobControllerApi();
         jobControllerApi.postCreateJob(jobControllerData);
@@ -39,7 +43,7 @@ public class MainTests extends BaseTest {
 
         String comment = faker.job().keySkills();
         mainPage
-                .clickViewInfoButton();
+                .clickViewInfoButton(title, description, price);
 //                .setComment(comment)
 //                .clickLeaveCommentButton();
 //        Assert.assertTrue(mainPage.isCommentDisplayed(comment));

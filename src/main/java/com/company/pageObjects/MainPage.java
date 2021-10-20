@@ -21,15 +21,16 @@ public class MainPage extends BasePage {
     @FindBy(xpath = "//mat-card[1]")
     private WebElement jobCard;
 
-    private String viewInfoButtonOnJobCardFormat = "//mat-card/mat-card-header/div/mat-card-title[contains(., 'Customer Consultant')]" +
-            "/../../../mat-card-subtitle[@class='mat-card-subtitle price' and contains(., 'Price 5000')]" +
-            "/../mat-card-content/p[contains(., 'Accounting')]" +
-            "/../../mat-card-actions/button/span[contains(., 'View info')]";
+    private String viewInfoButtonOnJobCardFormat = "//mat-card-title[contains(., '%s')]/ancestor::mat-card[1]" +
+            "/descendant::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]/ancestor::mat-card[1]" +
+            "/descendant::mat-card-content/p[contains(., '%s')]/ancestor::mat-card[1]" +
+            "/mat-card-actions/button/span[contains(., 'View info')]";
 
     @Step("Click View Info button")
-    public MainPage clickViewInfoButton() {
-        WebElement element = driver.findElement(By.xpath(viewInfoButtonOnJobCardFormat));
-        element.click();
+    public MainPage clickViewInfoButton(String title, String description, int price) {
+        String viewInfoButtonXPath = String.format(viewInfoButtonOnJobCardFormat, title, price, description);
+        WebElement viewInfoButton = driver.findElement(By.xpath(viewInfoButtonXPath));
+        viewInfoButton.click();
 //        WebElement createdJobCard = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(viewInfoButtonOnJobCardFormat)));
 //        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", viewInfoButtonOnJobCardFormat);
         return this;
