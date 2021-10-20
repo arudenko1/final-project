@@ -6,7 +6,6 @@ import com.company.entity.AuthControllerData;
 import com.company.entity.JobControllerData;
 import com.company.pageObjects.Header;
 import com.company.pageObjects.MainPage;
-import com.company.pageObjects.ProfilePage;
 import com.github.javafaker.Faker;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -28,7 +27,7 @@ public class MainTests extends BaseTest {
 
         String title = faker.job().title();
         String description = faker.job().position();
-        int price = (int)faker.number().randomNumber(2, true) * 100;
+        int price = (int) faker.number().randomNumber(2, true) * 100;
 
         JobControllerData jobControllerData = new JobControllerData();
         jobControllerData.setTitle(title);
@@ -43,13 +42,13 @@ public class MainTests extends BaseTest {
 
         String comment = faker.job().keySkills();
         mainPage
-                .clickViewInfoButton(title, description, price);
-//                .setComment(comment)
-//                .clickLeaveCommentButton();
-//        Assert.assertTrue(mainPage.isCommentDisplayed(comment));
-//        Header header = new Header(driver);
-//        header
-//                .clickUserIcon()
-//                .clickLogoutButton();
+                .clickViewInfoButton(title, description, price)
+                .setComment(comment)
+                .clickLeaveCommentButton();
+        Assert.assertTrue(mainPage.getComment().equals(comment));
+        Header header = new Header(driver);
+        header
+                .clickUserIcon()
+                .clickLogoutButton();
     }
 }
