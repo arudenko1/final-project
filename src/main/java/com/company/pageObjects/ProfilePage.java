@@ -1,5 +1,7 @@
 package com.company.pageObjects;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -8,6 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class ProfilePage extends BasePage {
 
@@ -19,12 +24,6 @@ public class ProfilePage extends BasePage {
 
     @FindBy(xpath = "//span[text()='Edit Info']")
     private WebElement editInfoButton;
-
-    @FindBy(xpath = "//input[@formcontrolname='name']")
-    private WebElement userNameInput;
-
-    @FindBy(xpath = "//input[@formcontrolname='lastname']")
-    private WebElement lastNameInput;
 
     @FindBy(xpath = "//span[text()=' Update ']")
     private WebElement updateButton;
@@ -59,11 +58,15 @@ public class ProfilePage extends BasePage {
     @FindBy(xpath = "//mat-card-subtitle[@class='mat-card-subtitle price']")
     private WebElement jobPrice;
 
-    private String createdJobCardFormat = "//mat-card/mat-card-header/div/mat-card-title[contains(., '%s')]" +
-            "//following::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]" +
-            "//following::mat-card-content/p[contains(., '%s')]";
+    // We should find the popup elements after loading the popup
+    private String userNameInputXpath = "//input[@formcontrolname='name']";
+    private String lastNameInputXpath = "//input[@formcontrolname='lastname']";
 
-    @Step
+    private String createdJobCardFormat = "//mat-card-title[contains(., '%s')]/ancestor::mat-card[1]" +
+            "/descendant::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]/ancestor::mat-card[1]" +
+            "/descendant::mat-card-content/p[contains(., '%s')]";
+
+    @Step("Check Edit Info Button Displayed")
     public boolean isEditInfoButtonDisplayed() {
         return editInfoButton.isDisplayed();
     }
@@ -90,16 +93,16 @@ public class ProfilePage extends BasePage {
 
     @Step("Set UserName")
     public ProfilePage setUserName(String userName) {
-        wait.until(ExpectedConditions.visibilityOf(userNameInput));
-        userNameInput.clear();
+        WebElement userNameInput = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath(userNameInputXpath)));
         setValue(userNameInput, userName);
         return this;
     }
 
     @Step("Set LastName")
     public ProfilePage setLastName(String lastName) {
-        wait.until(ExpectedConditions.visibilityOf(lastNameInput));
-        lastNameInput.clear();
+        WebElement lastNameInput = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath(lastNameInputXpath)));
         setValue(lastNameInput, lastName);
         return this;
     }

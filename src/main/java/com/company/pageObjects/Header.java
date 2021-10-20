@@ -1,6 +1,7 @@
 package com.company.pageObjects;
 
 import io.qameta.allure.Step;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,6 +27,7 @@ public class Header extends BasePage {
 
     @Step("Click user icon")
     public Header clickUserIcon() {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", userIcon);
         userIcon.click();
         return this;
     }
