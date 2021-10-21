@@ -58,4 +58,24 @@ public class ProfileTests extends BaseTest {
                 .clickUserIcon()
                 .clickLogoutButton();
     }
+
+    @Test(description = "Remove job test")
+    public void removeJobTest() throws InterruptedException, IOException {
+        signIn();
+        driver.get("https://freelance.lsrv.in.ua/profile");
+        ProfilePage profilePage = new ProfilePage(driver);
+        String jobTitle = faker.job().title();
+        String jobDescription = faker.job().field();
+        String jobPrice = Long.toString(faker.number().randomNumber(2, true) * 100);
+
+        profilePage
+                .commentCountExistOnEachJobCard()
+                .clickAddJobButton()
+                .setJobTitle(jobTitle)
+                .setJobPrice(jobPrice)
+                .setJobDescription(jobDescription)
+                .clickCreateJobButton()
+                .clickRemoveJobButton(jobTitle, jobDescription, jobPrice);
+        Assert.assertFalse(profilePage.isCreatedJobCardDisplayed(jobTitle, jobPrice, jobDescription));
+    }
 }

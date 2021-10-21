@@ -3,16 +3,12 @@ package com.company.pageObjects;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
+import java.util.List;
 
 public class ProfilePage extends BasePage {
 
@@ -58,13 +54,17 @@ public class ProfilePage extends BasePage {
     @FindBy(xpath = "//mat-card-subtitle[@class='mat-card-subtitle price']")
     private WebElement jobPrice;
 
-    // We should find the popup elements after loading the popup
+    private String jobCard = "//mat-card";
+    private String commentCountOnJobCard = ".//mat-card-subtitle/mat-card-subtitle[@class='mat-card-subtitle' and contains(text(),'Comments:')]";
     private String userNameInputXpath = "//input[@formcontrolname='name']";
     private String lastNameInputXpath = "//input[@formcontrolname='lastname']";
-
     private String createdJobCardFormat = "//mat-card-title[contains(., '%s')]/ancestor::mat-card[1]" +
             "/descendant::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]/ancestor::mat-card[1]" +
             "/descendant::mat-card-content/p[contains(., '%s')]";
+    private String removeJobCardFormat = "//mat-card-title[contains(., '%s')]/ancestor::mat-card[1]/" +
+            "descendant::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]/ancestor::mat-card[1]/" +
+            "descendant::mat-card-content/p[contains(., '%s')]/ancestor::mat-card[1]/" +
+            "mat-card-actions/button/span[contains(., 'Remove Job')]/..";
 
     @Step("Check Edit Info Button Displayed")
     public boolean isEditInfoButtonDisplayed() {
@@ -144,11 +144,41 @@ public class ProfilePage extends BasePage {
         return this;
     }
 
+    @Step("Click Remove job button")
+    public ProfilePage clickRemoveJobButton(String title, String description, String price) {
+        String removeJobButtonXPath = String.format(removeJobCardFormat, title, price, description);
+
+        WebElement removeJobButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(removeJobButtonXPath)));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", removeJobButton);
+        wait.until(ExpectedConditions.visibilityOf(removeJobButton));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", removeJobButton);
+        Alert alert = driver.switchTo().alert();
+        alert.accept(); // for OK
+        //removeJobButton.click();
+        return this;
+    }
+
     @Step("Check created job card is displayed")
     public boolean isCreatedJobCardDisplayed(String title, String price, String description) {
         String createdJobCardXpath = String.format(createdJobCardFormat, title, price, description);
-        WebElement createdJobCard = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(createdJobCardXpath)));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createdJobCard);
-        return isDisplayed(createdJobCard);
+        try {
+            WebElement createdJobCard = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(createdJobCardXpath)));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createdJobCard);
+            return isDisplayed(createdJobCard);
+        } catch (TimeoutException ex) {
+            return false;
+        }
+    }
+
+    @Step("Get jobs list")
+    public ProfilePage commentCountExistOnEachJobCard() {
+        List<WebElement> jobCards = driver.findElements(By.xpath(jobCard));
+        System.out.println("Size of List: " + jobCards.size());
+        boolean commentCountExistOnEachJobCard = true;
+        for (WebElement job : jobCards) {
+            WebElement commentCount = job.findElement(By.xpath(commentCountOnJobCard));
+            System.out.println("Comment count: " + commentCount.getText());
+        }
+        return this;
     }
 }
