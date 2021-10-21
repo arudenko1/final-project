@@ -1,0 +1,49 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Practice Suite">
+    <test name="Auth Controller API tests">
+        <classes>
+            <class name="com.tests.api.AuthControllerApiTests"></class>
+        </classes>
+    </test>
+    <test name="Comment Controller Tests">
+        <classes>
+            <class name="com.tests.api.CommentControllerApiTests"></class>
+        </classes>
+    </test>
+    <test name="Image Controller Api Tests">
+        <classes>
+            <class name="com.tests.api.ImageControllerApiTests"></class>
+        </classes>
+    </test>
+    <test name="Job Controller Api Tests">
+        <classes>
+            <class name="com.tests.api.JobControllerApiTests"></class>
+        </classes>
+    </test>
+    <test name="User Controller Api Tests">
+        <classes>
+            <class name="com.tests.api.UserControllerApiTests"></class>
+        </classes>
+    </test>
+    <test name="Login Tests">
+        <classes>
+            <class name="com.tests.ui.LoginTests"></class>
+        </classes>
+    </test>
+    <test name="Registration Tests">
+        <classes>
+            <class name="com.tests.ui.RegistrationTests"></class>
+        </classes>
+    </test>
+    <test name="Profile Tests">
+        <classes>
+            <class name="com.tests.ui.ProfileTests"></class>
+        </classes>
+    </test>
+   <test name="Main Tests">
+        <classes>
+            <class name="com.tests.ui.MainTests"></class>
+        </classes>
+    </test>
+</suite>
