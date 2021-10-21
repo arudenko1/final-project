@@ -56,15 +56,15 @@ public class ProfilePage extends BasePage {
 
     private String jobCard = "//mat-card";
     private String commentCountOnJobCard = ".//mat-card-subtitle/mat-card-subtitle[@class='mat-card-subtitle' and contains(text(),'Comments:')]";
-    private String userNameInputXpath = "//input[@formcontrolname='name']";
+    private String userNameInputXpath = "//mat-form-field[contains(@class, 'mat-focused')]/descendant::input[@formcontrolname='name']";
     private String lastNameInputXpath = "//input[@formcontrolname='lastname']";
     private String createdJobCardFormat = "//mat-card-title[contains(., '%s')]/ancestor::mat-card[1]" +
             "/descendant::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]/ancestor::mat-card[1]" +
             "/descendant::mat-card-content/p[contains(., '%s')]";
-    private String removeJobCardFormat = "//mat-card-title[contains(., '%s')]/ancestor::mat-card[1]/" +
-            "descendant::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]/ancestor::mat-card[1]/" +
-            "descendant::mat-card-content/p[contains(., '%s')]/ancestor::mat-card[1]/" +
-            "mat-card-actions/button/span[contains(., 'Remove Job')]/..";
+    private String removeJobCardFormat = "//mat-card-title[contains(., '%s')]/ancestor::mat-card[1]" +
+            "/descendant::mat-card-subtitle[@class='mat-card-subtitle price' and contains(., '%s')]/ancestor::mat-card[1]" +
+            "/descendant::mat-card-content/p[contains(., '%s')]/ancestor::mat-card[1]" +
+            "/mat-card-actions/button/span[contains(., 'Remove Job')]/..";
 
     @Step("Check Edit Info Button Displayed")
     public boolean isEditInfoButtonDisplayed() {
@@ -95,6 +95,9 @@ public class ProfilePage extends BasePage {
     public ProfilePage setUserName(String userName) {
         WebElement userNameInput = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.xpath(userNameInputXpath)));
+        //userNameInput.click();
+//        wait.until(
+//                ExpectedConditions.elementToBeClickable(userNameInput));
         setValue(userNameInput, userName);
         return this;
     }
